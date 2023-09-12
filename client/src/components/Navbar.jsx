@@ -5,6 +5,7 @@ import SolidButton from './SolidButton'
 import { BsRobot } from "react-icons/bs"
 import { LoginContext } from "../contexts/LoginContext"
 import { motion } from "framer-motion"
+import {Link} from "react-scroll"
 
 
 const Navbar = () => {
@@ -18,26 +19,49 @@ const Navbar = () => {
           transition={{ duration: 0.5, delay: 0.1 }}
           className=' flex items-center gap-2'>
           <img src={img} className='h-10' />
-          <h1 className=' font-semibold'>Relic.ai</h1>
+          <h1 className=' font-semibold drop-shadow-xl text-xl'>Relic.ai</h1>
 
         </motion.div>
 
         <ul className=' flex text-xs justify-between items-center gap-7 font-medium '>
-          <motion.li
+        <Link
+          to="home"
+          spy={true}
+          smooth={true}
+          offset={-70}
+          duration={500}
+          className=" cursor-pointer"
+        ><motion.li
+          className=' hover:underline '
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.3 }}
           >Home</motion.li>
+          </Link>
+          <Link
+          to="tour"
+          spy={true}
+          smooth={true}
+          offset={-70}
+          duration={500}
+          className=" cursor-pointer">
           <motion.li
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.5 }}
-          >About</motion.li>
+          >Tour</motion.li></Link>
+          <Link
+          to="places"
+          spy={true}
+          smooth={true}
+          offset={-70}
+          duration={500}
+          className=" cursor-pointer">
           <motion.li
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.7 }}
-          >Random</motion.li>
+          >Places </motion.li></Link>
         </ul>
         <div className=' flex flex-row gap-2'>
           <GhostButton
@@ -45,6 +69,7 @@ const Navbar = () => {
             y2={0}
             d={0.9}
             name={authState} />
+            <a href='/chat'>
           <SolidButton
             y1={-10}
             y2={0}
@@ -53,7 +78,7 @@ const Navbar = () => {
             name="Chat with AI"
             icon={<BsRobot className=' font-bold text-lg' />}
 
-          />
+          /></a>
         </div>
       </div>
     </nav>

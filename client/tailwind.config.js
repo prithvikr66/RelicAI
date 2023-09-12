@@ -8,7 +8,8 @@ export default {
     extend: {},
     fontFamily:{
       Noto:["Noto Sans", "sans-serif"],
-      Ubuntu:['Ubuntu', "sans-serif"]
+      Ubuntu:['Ubuntu', "sans-serif"],
+      Inter:['Inter', "sans-serif"]
     },
     colors:{
       buttonColor:"#b319feff",

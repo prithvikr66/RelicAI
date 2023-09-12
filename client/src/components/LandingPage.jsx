@@ -7,6 +7,8 @@ import {AiOutlineClose} from "react-icons/ai"
 import {createUserWithEmailAndPassword,signInWithEmailAndPassword,signOut} from "firebase/auth"
 import {auth} from "../firebase-config"
 import {animate, motion} from "framer-motion"
+import { Link } from 'react-scroll'
+import ChatBot from './ChatBot'
 
 const Home = () => {
   const {showLogin,setShowLogin,authState,setAuthState}=useContext(LoginContext)
@@ -51,17 +53,25 @@ const Home = () => {
 
   return (
    
-    <div className=' max-w-4xl mx-auto p-2 mt-9 '>
+    <div id='home' className=' max-w-4xl mx-auto p-2 mt-9 relative '>
     <div className='flex h-96 gap-4 '>
     <div className=' flex flex-col gap-5 mt-9'>
     <motion.h3 initial={{opacity:0,y:-10}}
     animate={{opacity:1,y:0}}
-    transition={{duration:0.5,delay:0.3}} className=' font-medium text-4xl '>Why <span className=' text-buttonColor font-bold'>RelicAI</span></motion.h3>
+    transition={{duration:0.5,delay:0.3}} className=' font-medium text-4xl '>Why <span className=' text-buttonColor font-bold drop-shadow-xl'>RelicAI</span>..?</motion.h3>
     <motion.p 
     initial={{opacity:0,y:10}}
     animate={{opacity:1,y:0}}
     transition={{duration:0.5,delay:0.6}}
     className=' leading-7'>Relic AI is your ultimate travel companion on the quest for unforgettable adventures. We understand that the world is a vast and beautiful place, filled with hidden gems and unique experiences waiting to be discovered. <br></br>That's why we've crafted Relic AI with a distinct passion for travel and a dedication to enhancing your explorations.</motion.p>
+            <Link
+          to="tour"
+          spy={true}
+          smooth={true}
+          offset={-70}
+          duration={500}
+          className=" cursor-pointer"
+        >
     <span>
     <SolidButton 
     y1={-10}
@@ -70,13 +80,15 @@ const Home = () => {
     name="Start Exploring"
     icon={<MdExplore className=' text-xl font-extrabold'/>} />
     </span>
-    
+    </Link>
     
     </div>
     
     <motion.img src={img} initial={{opacity:0,x:40}}
     animate={{opacity:1,x:0}}
-    transition={{duration:1,delay:0.3}}  />
+    transition={{duration:1,delay:0.3}}  
+      className='filter drop-shadow-2xl'
+    />
   
     </div>
     {
@@ -118,6 +130,7 @@ Sign up
   
    ):(<></>)
     }
+    {/* <ChatBot className=" absolute top-10" /> */}
     
         
     </div>
