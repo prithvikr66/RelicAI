@@ -93,22 +93,34 @@ const Home = () => {
     </div>
     {
       showLogin===true?(
-        <div className=' bg-whie h-60 w-1/2 mx-auto relative bottom-72 rounded-xl flex flex-col items-center justify-center '>
-    <div className=' flex'>
+        <div className=' bg-whie h-72 w-1/2 mx-auto relative bottom-72 rounded-xl flex flex-col items-center justify-center border'>
+    <div className=' flex '>
     <h3 className='text-center text-2xl font-medium p-5'>{authType}</h3>
     <motion.button 
     onClick={()=>{setShowLogin("false")}}
     className=' relative left-28'><AiOutlineClose className=''/></motion.button>
     </div>
-    <div className=' flex flex-col items-center justify-center gap-3'>
-    <input placeholder='email' 
+    <div className=' flex flex-col items-center justify-center gap-3 '>
+    {
+      authType==="Signup"?(<input
+      placeholder='Name'
+      className=' border rounded-2xl py-1 px-3 focus:outline-none '
+    />):(<></>)
+    }
+    <input placeholder='Email' 
     className=' border rounded-2xl py-1 px-3 focus:outline-none'
     onChange={(event)=>{setEmail(event.target.value)}}  
     />
-    <input placeholder='password'
+    <input placeholder='Password'
      className='border rounded-2xl py-1 px-3 focus:outline-none'
      onChange={(event)=>{setPassword(event.target.value)}}
      />
+    {
+      authType==="Login"?(
+         <p
+          className='  text-sm italic relative right-11  '
+         >Forgot Password.?</p>):(<></>)
+    }
     <button className=' border border-buttonColor bg-buttonColor bg-opacity-75 w-full rounded-2xl py-1 px-3 text-whie font-semibold'
     onClick={handleAuth}>{authType}
     </button>

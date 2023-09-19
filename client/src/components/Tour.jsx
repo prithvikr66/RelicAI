@@ -5,7 +5,6 @@ import {motion} from "framer-motion"
 import Map from "./Map"
 
 
-
 const Tour = () => {
   const [searchDestination,setSearchDestination]=useState("")
   const searchDestinationHandler=()=>{
