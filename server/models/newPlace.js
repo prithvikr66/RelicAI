@@ -11,6 +11,14 @@ const subLocationSchema=new mongoose.Schema({
     rating:{
         type:Number,
         required:true
+    },
+    latitude:{
+        type:Number,
+        required:true
+    },
+    longitude:{
+        type:Number,
+        required:true
     }
 })
 const Place=mongoose.model("Place",subLocationSchema)

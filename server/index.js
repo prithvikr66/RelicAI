@@ -12,6 +12,19 @@ app.get("/",(req,res)=>{
     res.send("working")
 
 })
+app.get("/pins",async(req,res)=>{
+    try{
+        console.log("received req")
+        const pins=await Place.find()
+        // if(pins.latitude&&pins.longitude)
+        res.status(200).json(pins)
+        console.log(pins)
+    }
+    catch(err){
+        console.log(err.message)
+    }
+
+})
 app.post("/pins",async(req,res)=>{
     const newPlace=new Place(req.body)
     console.log(req.body)

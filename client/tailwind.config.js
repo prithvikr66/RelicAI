@@ -12,7 +12,7 @@ export default {
       Inter:['Inter', "sans-serif"]
     },
     colors:{
-      buttonColor:"#b319feff",
+      buttonColor:"#336dc8",
       bodyColor:"#edf0f7ff",
       whie:"#fefeffff",
       black:"#000101ff"

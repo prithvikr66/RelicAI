@@ -1,8 +1,12 @@
 import React, { useEffect, useState } from "react";
 import Map, { FullscreenControl, GeolocateControl, Marker, Source, Layer, NavigationControl, Popup } from "react-map-gl";
 import 'mapbox-gl/dist/mapbox-gl.css';
-import axios from "axios"
+import axios, { all } from "axios"
 import toast from "react-hot-toast"
+import {FaMapPin} from "react-icons/fa"
+import Tesseract from 'tesseract.js';
+
+
 function App() {
   const [viewState, setViewState] = useState({
     longitude: 77.580643,
@@ -12,12 +16,14 @@ function App() {
   const [start, setStart] = useState([77.580643, 12.972442])
   const [end, setEnd] = useState([77.58032, 12.972234])
   const [coordinates, setCoordinates] = useState([])
-  const [newPlace,setNewPlace]=useState([])
+  const [newPlace,setNewPlace]=useState(null)
   const [showPopUp,setShowPopUp]=useState(false)
   const [title,setTitle]=useState("")
   const [review,setReview]=useState("")
   const [rating,setRating]=useState(0)
+  const [file,setFile]=useState()
   const [pins,setPins]=useState([])
+  const [ocrText,setOcrText]=useState("")
   const success=()=>toast("Successfully Submitted")
   useEffect(() => {
     getRoute();
@@ -57,11 +63,33 @@ function App() {
       "line-opacity": 0.75
     }
   }
+  
+
+useEffect(() => {
+  const getPins = async () => {
+    try {
+      const allPins = await axios.get("http://localhost:3000/pins");
+      // const allPins=await fetch("http://localhost:3000/pins")
+      setPins(allPins.data);
+      console.log(allPins.data)
+    } catch (err) {
+      console.log(err);
+    }
+  };
+  getPins();
+}, []);
+
   const mapClickHandler = (event) => {
     setEnd([event.lngLat.lng, event.lngLat.lat])
   }
   const dblClickHandler = async(event) => {
-    setNewPlace([event.lngLat.lng,event.lngLat.lat])
+    setFile()
+    setOcrText("")
+    setNewPlace({
+      lng:event.lngLat.lng,
+      lat:event.lngLat.lat
+    })
+    // setNewPlace([event.lngLat.lng,event.lngLat.lat])
     setShowPopUp(true)
 
   }
@@ -71,25 +99,38 @@ function App() {
 
   const handleConfirm=async(e)=>{
     e.preventDefault()
+    console.log("doing")
     
     const newPin={
       username:"NewUser",
       title,
       review,rating,
+      latitude:newPlace.lat,
+      longitude:newPlace.lng
       
     }
-    
-
+    console.log("done")
     try{
       const res=await axios.post("http://localhost:3000/pins",newPin)
       console.log(res.data)
-      setPins([...pins,res.json])
+      setPins([...pins,res.data])
     setShowPopUp(false)
     success();
 
     }catch(err){
       console.log(err.message)
     }
+
+  }
+  const handleOcr=(e)=>{
+    Tesseract.recognize(
+      file,
+      'eng',
+      { logger: m => console.log(m) }
+    ).then(({ data: { text } }) => {
+      setOcrText(text)
+      setReview(text)
+    })
 
   }
 
@@ -126,8 +167,8 @@ function App() {
       />
       {
         showPopUp &&(
-          <Popup  latitude={newPlace[1]}
-          longitude={newPlace[0]}
+          <Popup  latitude={newPlace.lat}
+          longitude={newPlace.lng}
           anchor="left"
           onClose={()=>setShowPopUp(false)}
           style={{borderRadius:10}}
@@ -135,14 +176,36 @@ function App() {
             <div className=" p-3">
               <form onSubmit={handleConfirm}>
                 <label className=" underline font-bold text-lg block py-2 ">Title</label>
-                <input placeholder="Enter a title.." className="block border italic focus:outline-none p-1 rounded-sm"
+                <input placeholder="Enter a title.." className="block border italic focus:outline-none p-1 rounded-sm w-full"
                   onChange={(e)=>setTitle(e.target.value)}
                 />
                 <label className=" block font-bold text-lg underline py-2">Review</label>
-                <textarea placeholder="Say something about this place.."
-                  className=" border rounded-sm block p-1 focus:outline-none italic"
+                
+
+                {
+                  ocrText?(
+                    <textarea placeholder="Say something about this place.."
+                  className=" border rounded-sm block p-1 focus:outline-none italic w-full"
                   onChange={(e)=>setReview(e.target.value)}
+                  value={ocrText}
                 />
+                  ):(
+                    <textarea placeholder="Say something about this place.."
+                  className=" border rounded-sm block p-1 focus:outline-none italic w-full"
+                  onChange={(e)=>setReview(e.target.value)}
+                  // value={ocrText}
+                />
+                  )
+                }
+                
+
+               
+
+               <div className=" flex mt-2">
+               <input type="file" placeholder="" className=" " onChange={(e)=>setFile(e.target.files[0])}/>
+              <button onClick={handleOcr} className=" border p-1 rounded-sm">Read</button>
+
+               </div>
                 <label className=" block font-semibold text-lg underline py-2">Rating</label>
                <select className="border block w-full p-2 bg-whie italic"
                onChange={(e)=>setRating(e.target.value)}>
@@ -161,6 +224,19 @@ function App() {
           </Popup>
         )
       }
+      {
+  pins &&
+  pins.map((i) => (
+    <Marker
+      key={i.id} // Don't forget to add a unique key when mapping over components
+      longitude={i.longitude}
+      latitude={i.latitude}
+    ><FaMapPin
+      className=" w-20"
+    /></Marker>
+  ))
+}
+
      
      
        
