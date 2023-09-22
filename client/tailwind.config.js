@@ -15,7 +15,8 @@ export default {
       buttonColor:"#336dc8",
       bodyColor:"#edf0f7ff",
       whie:"#fefeffff",
-      black:"#000101ff"
+      black:"#000101ff",
+      starColor:"#fed700"
     },
     
   },

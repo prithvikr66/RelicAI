@@ -27,7 +27,7 @@ const Tour = () => {
     <div className="absolute  left-0 w-full h-1 bg-buttonColor rounded-3xl "></div>
   </h3>
 </motion.div>
-       <div className=' relative mt-6' >
+      <div className=' relative mt-6' >
         <input 
         placeholder='Search'
         className=' block mx-auto py-2 px-14 rounded-3xl border focus:outline-none w-2/3 mt-5 drop-shadow-xl mb-9' 
